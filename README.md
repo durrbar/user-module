@@ -116,7 +116,7 @@ This package is open-sourced software licensed under the [MIT license](LICENSE.m
 
 ## Support
 
-For issues or feature requests, please open an issue on the [GitHub repository](https://github.com/durrbar/user-module).
+For issues or feature requests, please open an issue on the [GitHub repository](https://github.com/ikidmax/user-module).
 
 ---
 
