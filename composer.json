@@ -1,0 +1,52 @@
+{
+    "name": "durrbar/user-module",
+    "type": "laravel-module",
+    "description": "Laravel User module for authentication, authorization with Fortify, Sanctum, Socialite and laravel-permission by Spatie",
+    "authors": [
+        {
+            "name": "Kid Max",
+            "email": "kidmax285@gmail.com"
+        }
+    ],
+    "keywords": [
+      "auth",
+      "laravel",
+      "permission",
+      "permissions",
+      "roles",
+      "acl",
+      "rbac",
+      "security"
+    ],
+    "homepage": "https://github.com/ikidmax/user-module",
+    "license": "MIT",
+    "version": "0.0.1",
+    "require": {
+        "php": "^8.2",
+        "intervention/image-laravel": "^1.3",
+        "laravel/fortify": "^1.20",
+        "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.11",
+        "spatie/laravel-permission": "^6.4"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\User\\": "app/",
+            "Modules\\User\\Database\\Factories\\": "database/factories/",
+            "Modules\\User\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\User\\Tests\\": "tests/"
+        }
+    }
+}
