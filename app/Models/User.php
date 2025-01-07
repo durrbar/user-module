@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 // use Modules\User\Database\Factories\UserFactory;
@@ -92,5 +93,15 @@ class User extends Authenticatable implements MustVerifyEmail
                 "{$this->first_name} {$this->last_name}"
             )
         );
+    }
+
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
+
+    public function socialLinks(): HasMany
+    {
+        return $this->socialAccounts()->whereNotNull('profile_url');
     }
 }

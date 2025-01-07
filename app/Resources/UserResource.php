@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'has2FA'      => $this->two_factor_confirmed_at ? true : false,
             'createdAt'   => $this->created_at,
             'updatedAt'   => $this->updated_at,
+            'socialLinks' => SocialAccountResource::collection($this->whenLoaded('socialLinks'))
         ];
     }
 }

@@ -36,7 +36,7 @@ composer require durrbar/user-module
 Publish the configuration and migration files using the following command:
 
 ```bash
-php artisan vendor:publish --provider="Durrbar\UserModule\UserModuleServiceProvider"
+php artisan durrbar:user-install
 ```
 
 ### Step 3: Run Migrations
