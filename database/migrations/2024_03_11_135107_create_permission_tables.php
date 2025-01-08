@@ -84,7 +84,7 @@ return new class extends Migration
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
 
             $table->foreign($pivotRole)
-                ->references('id') // role id
+                ->references('uuid') // role id
                 ->on($tableNames['roles'])
                 ->onDelete('cascade');
             if ($teams) {

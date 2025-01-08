@@ -30,6 +30,6 @@ class AdminSeeder extends Seeder
             'phone' => fake()->bothify('880-1####-#####'),
             'birthday' => fake()->date(),
             'gender' => 'male',
-        ])->assignRole('super-admin');
+        ])->assignRole('Super Admin');
     }
 }

@@ -134,11 +134,13 @@ class RolePermissionSeeder extends Seeder
             'support.faqs.edit',
             'support.faqs.update',
             'support.faqs.delete',
+
+            'customer.*',
         ];
 
         // Create Permissions
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
+            Permission::create(['name' => $permission]);
         }
 
         // Roles and Permissions Assignment
@@ -253,7 +255,7 @@ class RolePermissionSeeder extends Seeder
 
         // Create Roles and Assign Permissions
         foreach ($roles as $roleName => $rolePermissions) {
-            $role = Role::create(['name' => $roleName, 'guard_name' => 'web']);
+            $role = Role::create(['name' => $roleName]);
             $role->givePermissionTo($rolePermissions);
         }
     }
