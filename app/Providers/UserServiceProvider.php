@@ -2,6 +2,7 @@
 
 namespace Modules\User\Providers;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,10 @@ class UserServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('Super Admin') ? true : null;
         });
+
+        Relation::enforceMorphMap([
+            'user' => 'Modules\User\Models\User',
+        ]);
     }
 
     /**
