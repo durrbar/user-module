@@ -19,8 +19,8 @@ trait HasProfilePhoto
         $previousPhoto = $user->photo;
 
         // Define custom name for avatar
-        $extension = $photo->getClientOriginalExtension();
-        $originalName = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $photo->extension();
+        $originalName = pathinfo($photo->hashName(), PATHINFO_FILENAME);
         $fileName = $originalName . '_' . time() . '_' . uniqid() . '.' . $extension;
 
         if (extension_loaded('imagick')) {

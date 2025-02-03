@@ -18,7 +18,7 @@
       "rbac",
       "security"
     ],
-    "homepage": "https://github.com/ikidmax/user-module",
+    "homepage": "https://github.com/durrbar/user-module",
     "license": "MIT",
     "version": "0.0.1",
     "require": {
