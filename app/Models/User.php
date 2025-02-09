@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Notification\Models\UserNotificationPreference;
 
 // use Modules\User\Database\Factories\UserFactory;
 
@@ -103,5 +104,26 @@ class User extends Authenticatable implements MustVerifyEmail
     public function socialLinks(): HasMany
     {
         return $this->socialAccounts()->whereNotNull('profile_url');
+    }
+
+    /**
+     * Get the user's notification preferences.
+     *
+     * @return HasMany
+     */
+    public function notificationPreferences()
+    {
+        return $this->hasMany(UserNotificationPreference::class);
+    }
+
+    /**
+     * Get the user's preference for a specific notification type.
+     *
+     * @param string $notificationType
+     * @return \Modules\Notification\Models\UserNotificationPreference|null
+     */
+    public function getNotificationPreference(string $notificationType)
+    {
+        return $this->notificationPreferences()->where('notification_type', $notificationType)->first();
     }
 }
