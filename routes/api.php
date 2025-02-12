@@ -22,7 +22,7 @@ use Modules\User\Resources\UserResource;
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     // Route::apiResource('user', UserController::class)->names('user');
 
-    Route::withoutMiddleware('auth:sanctum')->prefix('login')->name('login.')->group(function () {
+    Route::withoutMiddleware('auth:sanctum')->middleware('web')->prefix('login')->name('login.')->group(function () {
         Route::get('/callback/{provider}', [SocialiteController::class, 'callback'])->name('callback');
         Route::get('/redirect/{provider}', [SocialiteController::class, 'redirect'])->name('redirect');
     });

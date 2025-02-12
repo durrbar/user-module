@@ -25,8 +25,9 @@ class CreateNewUser implements CreatesNewUsers
             'email' => [
                 'required',
                 'string',
-                // Rule::email https://www.facebook.com/groups/laravelBD/posts/4102138280072693/
                 'email',
+                'strict',
+                'dns',
                 'max:255',
                 Rule::unique(User::class),
             ],

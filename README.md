@@ -1,7 +1,7 @@
 # User Module for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/durrbar/user-module.svg?style=flat-square)](https://packagist.org/packages/durrbar/user-module)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ikidmax/user-module/run-tests-L8.yml?branch=main&label=Tests)](https://github.com/ikidmax/user-module/actions?query=workflow%3ATests+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/durrbar/user-module/run-tests-L8.yml?branch=main&label=Tests)](https://github.com/durrbar/user-module/actions?query=workflow%3ATests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/durrbar/user-module.svg?style=flat-square)](https://packagist.org/packages/durrbar/user-module)
 
 The **User Module** is a powerful and flexible Laravel package designed to streamline user management. It provides essential functionality for managing users, roles, and permissions in Laravel applications.
@@ -116,7 +116,7 @@ This package is open-sourced software licensed under the [MIT license](LICENSE.m
 
 ## Support
 
-For issues or feature requests, please open an issue on the [GitHub repository](https://github.com/ikidmax/user-module).
+For issues or feature requests, please open an issue on the [GitHub repository](https://github.com/durrbar/user-module).
 
 ---
 

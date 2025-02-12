@@ -3,7 +3,9 @@
 namespace Modules\User\Console;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'durrbar:user-install')]
 class InstallCommand extends Command
 {
     /**
@@ -41,12 +43,10 @@ class InstallCommand extends Command
      */
     private function publishFortifyConfig()
     {
-        $this->info('Publishing Fortify configuration...');
-        $this->callSilent('vendor:publish', [
-            '--provider' => 'Laravel\Fortify\FortifyServiceProvider',
-            '--tag' => 'config',
+        $this->call('vendor:publish', [
+            '--tag' => ['durrbar-fortify-config', 'durrbar-sanctum-config'],
         ]);
 
-        $this->info('Fortify configuration published successfully.');
+        $this->info('User scaffolding installed successfully.');
     }
 }
