@@ -13,18 +13,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Notification\Traits\HasNotification;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 
 // use Modules\User\Database\Factories\UserFactory;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasRoles;
-    use HasFactory;
     use HasUuids;
+    use HasFactory;
     use Notifiable;
     use HasApiTokens;
-    use HasProfileAvatar;
     use HasNotification;
+    use HasProfileAvatar;
+    use HasLocalePreference;
     use TwoFactorAuthenticatable;
 
     /**
@@ -96,6 +98,14 @@ class User extends Authenticatable implements MustVerifyEmail
                 "{$this->first_name} {$this->last_name}"
             )
         );
+    }
+
+    /**
+     * Get the user's preferred locale.
+     */
+    public function preferredLocale(): string
+    {
+        return $this->language;
     }
 
     public function socialAccounts(): HasMany
