@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
-use Modules\User\Http\Controllers\ProfilePhotoController;
+use Modules\User\Http\Controllers\ProfileAvatarController;
 use Modules\User\Http\Controllers\SocialiteController;
 use Modules\User\Http\Controllers\UserController;
 use Modules\User\Resources\UserResource;
@@ -36,7 +36,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         })->name('me');
 
         // Profile Information...
-        Route::post('/profile-photo', [ProfilePhotoController::class, 'update'])->name('photo.update');
-        Route::delete('/profile-photo', [ProfilePhotoController::class, 'delete'])->name('photo.delete');
+        Route::post('/profile-photo', [ProfileAvatarController::class, 'update'])->name('photo.update');
+        Route::delete('/profile-photo', [ProfileAvatarController::class, 'delete'])->name('photo.delete');
     });
 });

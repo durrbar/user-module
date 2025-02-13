@@ -5,7 +5,7 @@ namespace Modules\User\Models;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
-use Modules\User\Traits\HasProfilePhoto;
+use Modules\User\Traits\HasProfileAvatar;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasUuids;
     use Notifiable;
     use HasApiTokens;
-    use HasProfilePhoto;
+    use HasProfileAvatar;
     use HasNotification;
     use TwoFactorAuthenticatable;
 
@@ -33,7 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $table = 'users';
 
     protected $appends = [
-        'photo_url',
+        'avatar_url',
         'name'
     ];
 
@@ -44,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'email',
-        'photo',
+        'avatar',
         'first_name',
         'last_name',
         'password',

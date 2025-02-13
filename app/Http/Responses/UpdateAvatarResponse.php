@@ -3,8 +3,9 @@
 namespace Modules\User\Http\Responses;
 
 use Modules\User\Contracts\BaseResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class DeletePhotoResponse implements BaseResponse
+class UpdateAvatarResponse implements BaseResponse
 {
     /**
      * Create an HTTP response that represents the object.
@@ -16,8 +17,9 @@ class DeletePhotoResponse implements BaseResponse
     {
         return $request->wantsJson()
             ? response()->json([
-                'message' => 'Profile photo deleted',
-            ], 200)
-            : back()->with('status', 'profile photo deleted');
+                'message' => 'Profile avatar updated',
+                'm2' => $request,
+            ], Response::HTTP_OK)
+            : back()->with('status', 'profile avatar updated');
     }
 }
