@@ -2,6 +2,7 @@
 
 namespace Modules\User\Http\Responses;
 
+use Illuminate\Http\Response;
 use Modules\User\Contracts\BaseResponse;
 
 class DeleteAvatarResponse implements BaseResponse
@@ -17,7 +18,7 @@ class DeleteAvatarResponse implements BaseResponse
         return $request->wantsJson()
             ? response()->json([
                 'message' => 'Profile avatar deleted',
-            ], 200)
+            ], Response::HTTP_OK)
             : back()->with('status', 'profile avatar deleted');
     }
 }
