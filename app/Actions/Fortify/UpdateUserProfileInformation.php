@@ -29,9 +29,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'firstName' => ['required', 'string', 'max:255'],
             'lastName' => ['required', 'string', 'max:255'],
             'phoneNumber' => ['required', 'string', 'max:14'],
-            'birthday' => 'required|date_format:Y-m-d',
-            'gender' => 'nullable|string',
-            'locale' => 'nullable|string',
+            'birthday' => ['required', 'date_format:Y-m-d'],
+            'gender' => ['nullable', 'string'],
+            'locale' => ['nullable', 'string'],
         ])->validateWithBag('updateProfileInformation');
 
         $data = [
