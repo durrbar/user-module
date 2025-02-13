@@ -17,7 +17,7 @@ use Illuminate\Contracts\Translation\HasLocalePreference;
 
 // use Modules\User\Database\Factories\UserFactory;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
     use HasRoles;
     use HasUuids;
@@ -26,7 +26,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use HasNotification;
     use HasProfileAvatar;
-    use HasLocalePreference;
     use TwoFactorAuthenticatable;
 
     /**
@@ -105,7 +104,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function preferredLocale(): string
     {
-        return $this->language;
+        return $this->locale;
     }
 
     public function socialAccounts(): HasMany

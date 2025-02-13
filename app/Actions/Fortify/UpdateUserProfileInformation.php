@@ -30,44 +30,26 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'lastName' => ['required', 'string', 'max:255'],
             'phoneNumber' => ['required', 'string', 'max:14'],
             'birthday' => 'required|date_format:Y-m-d',
-            'gender',
-
+            'gender' => 'nullable|string',
+            'locale' => 'nullable|string',
         ])->validateWithBag('updateProfileInformation');
 
-        if (
-            $input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail
-        ) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
-            $user->forceFill([
-                'email' => $input['email'],
-                'first_name' => $input['firstName'],
-                'last_name' => $input['lastName'],
-                'phone' => $input['phoneNumber'],
-                'birthday' => $input['birthday'],
-                'gender' => $input['gender'],
-            ])->save();
-        }
-    }
-
-    /**
-     * Update the given verified user's profile information.
-     *
-     * @param  array<string, string>  $input
-     */
-    protected function updateVerifiedUser(User $user, array $input): void
-    {
-        $user->forceFill([
+        $data = [
             'email' => $input['email'],
             'first_name' => $input['firstName'],
             'last_name' => $input['lastName'],
             'phone' => $input['phoneNumber'],
             'birthday' => $input['birthday'],
-            'gender' => $input['gender'],
-            'email_verified_at' => null,
-        ])->save();
+            'gender' => $input['gender'] ?? null,
+            'locale' => $input['locale'] ?? null,
+        ];
 
-        $user->sendEmailVerificationNotification();
+        if ($input['email'] !== $user->email && $user instanceof MustVerifyEmail) {
+            $data['email_verified_at'] = null;
+            $user->forceFill($data)->save();
+            $user->sendEmailVerificationNotification();
+        } else {
+            $user->forceFill($data)->save();
+        }
     }
 }

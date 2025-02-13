@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'phone'       => $this->phone,
             'birthday'    => $this->birthday,
             'gender'      => $this->gender,
+            'locale'      => $this->locale,
             'has2FA'      => $this->two_factor_confirmed_at ? true : false,
             'createdAt'   => $this->created_at,
             'updatedAt'   => $this->updated_at,
