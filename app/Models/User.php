@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Notification\Traits\HasNotification;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Modules\Address\Models\Address;
 
 // use Modules\User\Database\Factories\UserFactory;
 
@@ -116,4 +117,14 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     {
         return $this->socialAccounts()->whereNotNull('profile_url');
     }
+
+    /**
+     * Get all addresses created by the user.
+     */
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'created_by');
+    }
+
+
 }
