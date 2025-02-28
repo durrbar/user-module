@@ -76,20 +76,6 @@ trait HasProfileAvatar
     {
         return $this->avatar
             ? Storage::url($this->avatar)
-            : $this->defaultProfileAvatarUrl();
-    }
-
-    /**
-     * Get the default profile avatar URL if no avatar has been uploaded.
-     *
-     * @return string
-     */
-    protected function defaultProfileAvatarUrl()
-    {
-        $name = trim(collect(explode(' ', $this->name))->map(function ($segment) {
-            return mb_substr($segment, 0, 1);
-        })->join(' '));
-
-        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=7F9CF5&background=EBF4FF';
+            : '';
     }
 }
