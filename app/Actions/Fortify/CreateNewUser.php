@@ -26,7 +26,6 @@ class CreateNewUser implements CreatesNewUsers
                 'required',
                 'string',
                 'email',
-                'strict',
                 'dns',
                 'max:255',
                 Rule::unique(User::class),
