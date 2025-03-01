@@ -25,8 +25,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => [
                 'required',
                 'string',
-                'email',
-                'dns',
+                Rule::email()->rfcCompliant(strict: true)->validateMxRecord(),
                 'max:255',
                 Rule::unique(User::class),
             ],
