@@ -4,7 +4,9 @@ namespace Modules\User\Traits;
 
 use Modules\User\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Modules\Common\Facades\FileHelper;
 
 trait HasProfileAvatar
 {
@@ -18,27 +20,10 @@ trait HasProfileAvatar
     {
         $previousAvatar = $user->avatar;
 
-        // Define custom name for avatar
-        $extension = $avatar->extension();
-        $originalName = pathinfo($avatar->hashName(), PATHINFO_FILENAME);
-        $fileName = $originalName . '_' . time() . '_' . uniqid() . '.' . $extension;
-
-        if (extension_loaded('imagick')) {
-            // Resize and compress the avatar using Imagick
-            $image = \Intervention\Image\Laravel\Facades\Image::make($avatar->getPathname())
-                ->resize(null, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode($extension, 75); // 75 is the quality percentage
-
-            // Store the image
-            $path = 'uploads/user/avatar/' . $fileName;
-            Storage::put($path, (string) $image);
-        } else {
-            // Directly upload the avatar without resizing
-            $path = $avatar->storeAs('uploads/user/avatar', $fileName);
-        }
+        $path = FileHelper::setFile($avatar)
+            ->setPath('uploads/user/avatar')
+            ->generateUniqueFileName()
+            ->upload()->getPath();
 
         // Update user's avatar path
         $user->avatar = $path;
