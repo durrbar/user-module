@@ -87,6 +87,10 @@ class UserServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../../stubs/sanctum.php' => config_path('sanctum.php'),
             ], 'durrbar-sanctum-config');
+
+            $this->publishes([
+                __DIR__ . '/../../stubs/permission.php' => config_path('permission.php'),
+            ], 'durrbar-permission-config');
         }
     }
 

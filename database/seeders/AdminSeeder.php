@@ -19,17 +19,6 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'first_name' => fake()->firstName(),
-            'last_name' => fake()->lastName(),
-            'photo' => 'uploads/user/avater/_MG_82041_1707802961_65cb0151779a8.jpg',
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-            'phone' => fake()->bothify('880-1####-#####'),
-            'birthday' => fake()->date(),
-            'gender' => 'male',
-        ])->assignRole('Super Admin');
+        User::first()->assignRole('Super Admin');
     }
 }

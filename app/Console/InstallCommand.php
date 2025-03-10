@@ -44,7 +44,7 @@ class InstallCommand extends Command
     private function publishFortifyConfig()
     {
         $this->call('vendor:publish', [
-            '--tag' => ['durrbar-fortify-config', 'durrbar-sanctum-config'],
+            '--tag' => ['durrbar-fortify-config', 'durrbar-sanctum-config', 'durrbar-permission-config'],
         ]);
 
         $this->info('User scaffolding installed successfully.');
