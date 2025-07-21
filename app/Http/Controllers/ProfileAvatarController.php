@@ -2,23 +2,18 @@
 
 namespace Modules\User\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Modules\User\Http\Requests\ProfileAvatarRequest;
+use Illuminate\Http\Request;
 use Modules\User\Actions\Profile\DeleteProfileAvatar;
 use Modules\User\Actions\Profile\UpdateProfileAvatar;
+use Modules\User\Http\Requests\ProfileAvatarRequest;
 use Modules\User\Http\Responses\DeleteAvatarResponse;
 use Modules\User\Http\Responses\UpdateAvatarResponse;
-
 
 class ProfileAvatarController extends Controller
 {
     /**
      * Update the user's profile avatar.
-     *
-     * @param  \Modules\User\Http\Requests\ProfileAvatarRequest  $request
-     * @param  \Modules\User\Actions\Profile\UpdateProfileAvatar  $updater
-     * @return \Modules\User\Http\Responses\UpdateAvatarResponse
      */
     public function update(ProfileAvatarRequest $request, UpdateProfileAvatar $updater): UpdateAvatarResponse
     {
@@ -30,7 +25,6 @@ class ProfileAvatarController extends Controller
     /**
      * Delete the user's profile avatar.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Modules\User\App\Actions\Profile\DeleteProfileAvatar  $updater
      * @return \Modules\User\App\Http\Responses\DeleteAvatarResponse
      */

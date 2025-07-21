@@ -13,7 +13,7 @@ class SocialAccountResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            $this->provider_name => $this->profile_url
+            $this->provider_name => $this->profile_url,
         ];
     }
 }

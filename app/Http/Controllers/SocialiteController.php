@@ -5,9 +5,9 @@ namespace Modules\User\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\User\Models\User;
-use Illuminate\Support\Str;
 
 class SocialiteController extends Controller
 {
@@ -24,12 +24,10 @@ class SocialiteController extends Controller
             ->redirect();
     }
 
-
     /**
      * Obtain the user information from the provider.
      *
      * @param  string  $provider
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function callback($provider, Request $request)
@@ -64,7 +62,7 @@ class SocialiteController extends Controller
             // Log the user in
             Auth::login($user, true);
 
-            return redirect()->away(env('FRONTEND_URL') . '/about-us'); // Redirect to the intended page
+            return redirect()->away(env('FRONTEND_URL').'/about-us'); // Redirect to the intended page
         } catch (\Exception $e) {
             // Log the error for debugging
             report($e);
@@ -73,29 +71,29 @@ class SocialiteController extends Controller
         }
     }
 
-    //To generate the profile URL
+    // To generate the profile URL
     private function generateProfileUrl(string $provider, $socialUser): ?string
     {
         switch ($provider) {
             case 'facebook':
                 // Facebook URL format: https://facebook.com/{user_id}
-                return 'https://facebook.com/' . $socialUser->getId();
+                return 'https://facebook.com/'.$socialUser->getId();
 
             case 'twitter':
                 // Twitter URL format: https://twitter.com/{username}
-                return 'https://twitter.com/' . $socialUser->getNickname();
+                return 'https://twitter.com/'.$socialUser->getNickname();
 
             case 'github':
                 // GitHub URL format: https://github.com/{username}
-                return 'https://github.com/' . $socialUser->getNickname();
+                return 'https://github.com/'.$socialUser->getNickname();
 
             case 'linkedin':
                 // LinkedIn URL format: https://www.linkedin.com/in/{username}
-                return 'https://www.linkedin.com/in/' . $socialUser->getNickname();
+                return 'https://www.linkedin.com/in/'.$socialUser->getNickname();
 
             case 'gitlab':
                 // GitLab URL format: https://gitlab.com/{username}
-                return 'https://gitlab.com/' . $socialUser->getNickname();
+                return 'https://gitlab.com/'.$socialUser->getNickname();
 
             case 'slack':
                 // Slack does not provide a profile URL by default.
@@ -103,11 +101,11 @@ class SocialiteController extends Controller
 
             case 'spotify':
                 // Spotify URL format: https://open.spotify.com/user/{user_id}
-                return 'https://open.spotify.com/user/' . $socialUser->getId();
+                return 'https://open.spotify.com/user/'.$socialUser->getId();
 
             case 'bitbucket':
                 // Bitbucket URL format: https://bitbucket.org/{username}
-                return 'https://bitbucket.org/' . $socialUser->getNickname();
+                return 'https://bitbucket.org/'.$socialUser->getNickname();
 
             default:
                 // Return null or handle other providers without a URL.

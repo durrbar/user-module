@@ -18,7 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 // use Modules\User\Database\Factories\UserFactory;
 
-class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
+class UserOld extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;

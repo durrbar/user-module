@@ -3,8 +3,8 @@
 namespace Modules\User\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 // use Modules\User\Database\Factories\SocialAccountFactory;
 
@@ -21,7 +21,7 @@ class SocialAccount extends Model
         'provider_name',
         'provider_id',
         'access_token',
-        'profile_url'
+        'profile_url',
     ];
 
     // protected static function newFactory(): SocialAccountFactory

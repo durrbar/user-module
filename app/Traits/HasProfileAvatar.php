@@ -2,18 +2,16 @@
 
 namespace Modules\User\Traits;
 
-use Modules\User\Models\User;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Modules\Common\Facades\FileHelper;
+use Modules\User\Models\User;
 
 trait HasProfileAvatar
 {
     /**
      * Update the user's profile avatar.
      *
-     * @param \Illuminate\Http\UploadedFile $avatar
      * @return void
      */
     public function updateProfileAvatar(UploadedFile $avatar, User $user)
