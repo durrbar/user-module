@@ -2,10 +2,13 @@
 
 namespace Modules\User\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Provider extends Model
 {
+    use HasUuids;
+    
     protected $table = 'providers';
 
     protected $fillable = ['provider', 'provider_user_id', 'user_id'];

@@ -4,7 +4,7 @@ namespace Modules\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\User\Models\Permission;
-use Modules\User\Models\Role;
+use Modules\Role\Models\Role;
 
 class RolePermissionSeeder extends Seeder
 {
