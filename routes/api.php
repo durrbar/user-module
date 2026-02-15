@@ -19,25 +19,19 @@ use Modules\User\Resources\UserResource;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function (): void {
-    // Route::apiResource('user', UserController::class)->names('user');
-
-    Route::withoutMiddleware('auth:sanctum')->middleware('web')->prefix('login')->name('login.')->group(function (): void {
-        Route::get('/callback/{provider}', [SocialiteController::class, 'callback'])->name('callback');
-        Route::get('/redirect/{provider}', [SocialiteController::class, 'redirect'])->name('redirect');
+Route::prefix('v1')->middleware('auth:sanctum')->group(function (): void {
+    // Authentication routes (Socialite)
+    Route::prefix('login')->name('login.')->withoutMiddleware('auth:sanctum')->middleware('web')->group(function (): void {
+        Route::get('callback/{provider}', [SocialiteController::class, 'callback'])->name('callback');
+        Route::get('redirect/{provider}', [SocialiteController::class, 'redirect'])->name('redirect');
     });
 
-    // User routes
-    Route::middleware('verified')->prefix('user')->name('user.')->group(function (): void {
+    // Authenticated user routes
+    Route::prefix('user')->name('user.')->middleware('verified')->group(function (): void {
+        Route::get('me', [UserController::class, 'me'])->withoutMiddleware('verified')->name('me');
 
-        Route::get('/me', function (Request $request) {
-            $user = new UserResource($request->user());
-
-            return response()->json(['user' => $user], Response::HTTP_OK);
-        })->name('me');
-
-        // Profile Information...
-        Route::post('/profile-photo', [ProfileAvatarController::class, 'update'])->name('photo.update');
-        Route::delete('/profile-photo', [ProfileAvatarController::class, 'delete'])->name('photo.delete');
+        // Profile management
+        Route::post('profile-photo', [ProfileAvatarController::class, 'update'])->name('photo.update');
+        Route::delete('profile-photo', [ProfileAvatarController::class, 'delete'])->name('photo.delete');
     });
 });
