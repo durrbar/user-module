@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'locale' => $this->locale,
             'has2FA' => $this->two_factor_confirmed_at ? true : false,
+            'emailVerifiedAt' => $this->email_verified_at,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'socialLinks' => SocialAccountResource::collection($this->whenLoaded('socialLinks')),
