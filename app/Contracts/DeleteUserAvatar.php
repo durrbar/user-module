@@ -2,10 +2,9 @@
 
 namespace Modules\User\Contracts;
 
-/**
- * @method void delete(\Illuminate\Foundation\Auth\User $user)
- */
+use Modules\User\Models\User;
+
 interface DeleteUserAvatar
 {
-    //
+    public function delete(User $user): void;
 }

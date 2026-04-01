@@ -5,7 +5,6 @@ namespace Modules\User\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,17 +17,27 @@ use Spatie\Permission\Traits\HasRoles;
 
 // use Modules\User\Database\Factories\UserFactory;
 
+/**
+ * @property string $id
+ * @property string $email
+ * @property string|null $avatar
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $phone
+ * @property string|null $birthday
+ * @property string|null $gender
+ * @property string|null $locale
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ */
 class UserOld extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     use HasApiTokens;
-    use HasFactory;
     use HasNotification;
     use HasProfileAvatar;
     use HasRoles;
     use HasUuids;
     use Notifiable;
     use TwoFactorAuthenticatable;
-
     /**
      * The table associated with the model.
      */
@@ -89,14 +98,16 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
      *
      * @return string
      */
-    public function getNameAttribute()
+    public function getNameAttribute(): string
     {
+        $fullName = preg_replace(
+            '/\s+/',
+            ' ',
+            "{$this->first_name} {$this->last_name}"
+        ) ?? '';
+
         return trim(
-            preg_replace(
-                '/\s+/',
-                ' ',
-                "{$this->first_name} {$this->last_name}"
-            )
+            $fullName
         );
     }
 
@@ -108,11 +119,17 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
         return $this->locale ?? app()->getLocale();
     }
 
+    /**
+     * @return HasMany<SocialAccount, $this>
+     */
     public function socialAccounts(): HasMany
     {
         return $this->hasMany(SocialAccount::class);
     }
 
+    /**
+     * @return HasMany<SocialAccount, $this>
+     */
     public function socialLinks(): HasMany
     {
         return $this->socialAccounts()->whereNotNull('profile_url');
@@ -120,8 +137,10 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
 
     /**
      * Get all addresses created by the user.
+     *
+     * @return HasMany<Address, $this>
      */
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'created_by');
     }

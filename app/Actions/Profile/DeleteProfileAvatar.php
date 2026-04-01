@@ -8,9 +8,7 @@ use Modules\User\Models\User;
 class DeleteProfileAvatar implements DeleteUserAvatar
 {
     /**
-     * delete the given user's avatar.
-     *
-     * @param  array<string
+     * Delete the given user's avatar.
      */
     public function delete(User $user): void
     {

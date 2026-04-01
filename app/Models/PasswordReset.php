@@ -10,7 +10,7 @@ class PasswordReset extends Model
     use HasUuids;
     
     /**
-     * @var string[]
+     * @var list<string>
      */
     protected $fillable = [
         'email', 'token',

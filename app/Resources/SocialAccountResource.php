@@ -9,11 +9,20 @@ class SocialAccountResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
+        $resource = $this->resource;
+        $providerName = data_get($resource, 'provider_name');
+
+        if (! is_string($providerName) || $providerName === '') {
+            return [];
+        }
+
         return [
-            $this->provider_name => $this->profile_url,
+            $providerName => data_get($resource, 'profile_url'),
         ];
     }
 }

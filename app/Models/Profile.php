@@ -20,6 +20,9 @@ class Profile extends Model
         'notifications' => 'json',
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');

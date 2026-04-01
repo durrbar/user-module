@@ -11,10 +11,12 @@ class UserResourceCollection extends Resource
      * Transform the resource into an array.
      *
      * @param  Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+
+        return ['data' => $data];
     }
 }

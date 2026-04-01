@@ -2,92 +2,47 @@
 
 namespace Modules\User\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\Core\Exceptions\DurrbarException;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\User\Http\Requests\ProfileRequest;
 use Modules\User\Models\Profile;
 use Modules\User\Repositories\ProfileRepository;
-use Prettus\Validator\Exceptions\ValidatorException;
 
 class ProfileController extends CoreController
 {
-    public $repository;
+    protected ProfileRepository $repository;
 
     public function __construct(ProfileRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Collection|Profile
-     */
-    public function index(Request $request)
+    public function index(Request $request): mixed
     {
         return $this->repository->with('customer')->all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return mixed
-     *
-     * @throws ValidatorException
-     */
-    public function store(ProfileRequest $request)
+    public function store(ProfileRequest $request): mixed
     {
-        $validatedData = $request->all();
+        $validatedData = $request->validated();
 
         return $this->repository->create($validatedData);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @return JsonResponse
-     */
-    public function show($id)
+    public function show(string $id): mixed
     {
-        try {
-            return $this->repository->with('customer')->findOrFail($id);
-        } catch (DurrbarException $e) {
-            throw new DurrbarException(NOT_FOUND);
-        }
+        return Profile::query()->with('customer')->findOrFail($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return JsonResponse
-     */
-    public function update(ProfileRequest $request, $id)
+    public function update(ProfileRequest $request, string $id): mixed
     {
-        try {
-            $validatedData = $request->all();
+        $validatedData = $request->validated();
 
-            return $this->repository->findOrFail($id)->update($validatedData);
-        } catch (DurrbarException $e) {
-            throw new DurrbarException(NOT_FOUND);
-        }
+        return Profile::query()->findOrFail($id)->update($validatedData);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return JsonResponse
-     */
-    public function destroy($id)
+    public function destroy(string $id): mixed
     {
-        try {
-            return $this->repository->findOrFail($id)->delete();
-        } catch (DurrbarException $e) {
-            throw new DurrbarException(NOT_FOUND);
-        }
+        return Profile::query()->findOrFail($id)->delete();
     }
 }

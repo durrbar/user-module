@@ -2,7 +2,6 @@
 
 namespace Modules\User\Actions\Fortify;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -13,7 +12,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     /**
      * Validate and update the given user's profile information.
      *
-     * @param  array<string, string>  $input
+     * @param  array<string, mixed>  $input
      */
     public function update(User $user, array $input): void
     {
@@ -44,7 +43,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'locale' => $input['locale'] ?? null,
         ];
 
-        if ($input['email'] !== $user->email && $user instanceof MustVerifyEmail) {
+        if ($input['email'] !== $user->email) {
             $data['email_verified_at'] = null;
             $user->forceFill($data)->save();
             $user->sendEmailVerificationNotification();

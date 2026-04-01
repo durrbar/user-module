@@ -17,6 +17,10 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::first()->assignRole('Super Admin');
+        $admin = User::first();
+
+        if ($admin instanceof User) {
+            $admin->assignRole('Super Admin');
+        }
     }
 }

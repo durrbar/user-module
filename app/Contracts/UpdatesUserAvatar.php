@@ -2,10 +2,12 @@
 
 namespace Modules\User\Contracts;
 
-/**
- * @method void update(\Illuminate\Foundation\Auth\User $user, array $input)
- */
+use Modules\User\Models\User;
+
 interface UpdatesUserAvatar
 {
-    //
+    /**
+     * @param  array<string, mixed>  $input
+     */
+    public function update(User $user, array $input): void;
 }

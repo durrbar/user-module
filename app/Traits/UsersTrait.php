@@ -8,7 +8,10 @@ use Modules\User\Models\User;
 
 trait UsersTrait
 {
-    public function getAdminUsers()
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, User>
+     */
+    public function getAdminUsers(): \Illuminate\Database\Eloquent\Collection
     {
         return Cache::remember(
             'cached_admin',

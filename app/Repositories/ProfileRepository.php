@@ -10,7 +10,7 @@ use Prettus\Repository\Exceptions\RepositoryException;
 class ProfileRepository extends BaseRepository
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $fieldSearchable = [
         'contact' => 'like',
@@ -18,7 +18,7 @@ class ProfileRepository extends BaseRepository
         'customer.name' => 'like',
     ];
 
-    public function boot()
+    public function boot(): void
     {
         try {
             $this->pushCriteria(app(RequestCriteria::class));
@@ -28,8 +28,10 @@ class ProfileRepository extends BaseRepository
 
     /**
      * Configure the Model
+     *
+     * @return class-string<Profile>
      **/
-    public function model()
+    public function model(): string
     {
         return Profile::class;
     }

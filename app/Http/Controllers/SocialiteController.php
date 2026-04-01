@@ -3,113 +3,120 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\AbstractProvider;
 use Modules\User\Models\User;
+use Throwable;
 
 class SocialiteController extends Controller
 {
-    /**
-     * Redirect the user to the OAuth provider.
-     *
-     * @param  string  $provider
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function redirect($provider)
+    public function redirect(string $provider): RedirectResponse
     {
-        return Socialite::driver($provider)
+        return $this->resolveProvider($provider)
             ->scopes(['openid', 'profile', 'email'])
             ->redirect();
     }
 
-    /**
-     * Obtain the user information from the provider.
-     *
-     * @param  string  $provider
-     * @return \Illuminate\Http\Response
-     */
-    public function callback($provider, Request $request)
+    public function callback(string $provider, Request $request): RedirectResponse|JsonResponse
     {
         try {
-            // Retrieve user info from the social provider
-            $socialUser = Socialite::driver($provider)->stateless()->user();
+            $socialUser = $this->resolveProvider($provider)->stateless()->user();
+            $email = $socialUser->getEmail();
 
-            // Find or create the user based on email
+            if (! is_string($email) || $email === '') {
+                return response()->json(['message' => 'Social provider did not return an email address.'], 422);
+            }
+
+            $fullName = $socialUser->getName();
+            $safeName = is_string($fullName) ? $fullName : '';
+
             $user = User::firstOrCreate(
-                ['email' => $socialUser->getEmail()],
+                ['email' => $email],
                 [
-                    'first_name' => Str::before($socialUser->getName(), ' ') ?? '',
-                    'last_name' => Str::after($socialUser->getName(), ' ') ?? '',
+                    'first_name' => Str::before($safeName, ' '),
+                    'last_name' => Str::after($safeName, ' '),
                     'avatar' => $socialUser->getAvatar(),
                     'email_verified_at' => now(),
                 ]
             );
 
-            // Check if the social account exists for this user and provider or create
             $user->socialAccounts()->firstOrCreate(
                 [
                     'provider_name' => $provider,
                 ],
                 [
-                    'provider_id' => $socialUser->getId(),
+                    'provider_id' => (string) $socialUser->getId(),
                     'access_token' => $socialUser->token ?? null,
                     'profile_url' => $this->generateProfileUrl($provider, $socialUser),
                 ]
             );
 
-            // Log the user in
             Auth::login($user, true);
 
-            return redirect()->away(env('FRONTEND_URL').'/about-us'); // Redirect to the intended page
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            report($e);
+            $frontendUrl = config('app.frontend_url');
+            $appUrl = config('app.url');
 
-            return response()->json($e->getMessage());
+            if (! is_string($frontendUrl) || $frontendUrl === '') {
+                $frontendUrl = is_string($appUrl) ? $appUrl : '';
+            }
+
+            return redirect()->away($frontendUrl.'/about-us');
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
-    // To generate the profile URL
-    private function generateProfileUrl(string $provider, $socialUser): ?string
+    private function generateProfileUrl(string $provider, SocialiteUser $socialUser): ?string
     {
+        $id = (string) $socialUser->getId();
+        $nickname = $socialUser->getNickname();
+
         switch ($provider) {
             case 'facebook':
-                // Facebook URL format: https://facebook.com/{user_id}
-                return 'https://facebook.com/'.$socialUser->getId();
+                return $id !== '' ? 'https://facebook.com/'.$id : null;
 
             case 'twitter':
-                // Twitter URL format: https://twitter.com/{username}
-                return 'https://twitter.com/'.$socialUser->getNickname();
+                return is_string($nickname) && $nickname !== '' ? 'https://twitter.com/'.$nickname : null;
 
             case 'github':
-                // GitHub URL format: https://github.com/{username}
-                return 'https://github.com/'.$socialUser->getNickname();
+                return is_string($nickname) && $nickname !== '' ? 'https://github.com/'.$nickname : null;
 
             case 'linkedin':
-                // LinkedIn URL format: https://www.linkedin.com/in/{username}
-                return 'https://www.linkedin.com/in/'.$socialUser->getNickname();
+                return is_string($nickname) && $nickname !== '' ? 'https://www.linkedin.com/in/'.$nickname : null;
 
             case 'gitlab':
-                // GitLab URL format: https://gitlab.com/{username}
-                return 'https://gitlab.com/'.$socialUser->getNickname();
+                return is_string($nickname) && $nickname !== '' ? 'https://gitlab.com/'.$nickname : null;
 
             case 'slack':
-                // Slack does not provide a profile URL by default.
                 return null;
 
             case 'spotify':
-                // Spotify URL format: https://open.spotify.com/user/{user_id}
-                return 'https://open.spotify.com/user/'.$socialUser->getId();
+                return $id !== '' ? 'https://open.spotify.com/user/'.$id : null;
 
             case 'bitbucket':
-                // Bitbucket URL format: https://bitbucket.org/{username}
-                return 'https://bitbucket.org/'.$socialUser->getNickname();
+                return is_string($nickname) && $nickname !== '' ? 'https://bitbucket.org/'.$nickname : null;
 
             default:
-                // Return null or handle other providers without a URL.
                 return null;
         }
+    }
+
+    private function resolveProvider(string $provider): AbstractProvider
+    {
+        $socialiteProvider = Socialite::driver($provider);
+
+        if (! $socialiteProvider instanceof AbstractProvider) {
+            throw new \InvalidArgumentException("Unsupported provider [$provider].");
+        }
+
+        return $socialiteProvider;
     }
 }

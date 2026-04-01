@@ -12,9 +12,8 @@ trait HasProfileAvatar
     /**
      * Update the user's profile avatar.
      *
-     * @return void
      */
-    public function updateProfileAvatar(UploadedFile $avatar, User $user)
+    public function updateProfileAvatar(UploadedFile $avatar, User $user): void
     {
         $previousAvatar = $user->avatar;
 
@@ -28,7 +27,7 @@ trait HasProfileAvatar
         $user->save();
 
         // Delete previous avatar if it exists
-        if ($previousAvatar) {
+        if (is_string($previousAvatar) && $previousAvatar !== '') {
             Storage::delete($previousAvatar);
         }
     }
@@ -36,11 +35,10 @@ trait HasProfileAvatar
     /**
      * Delete the user's profile avatar.
      *
-     * @return void
      */
-    public function deleteProfileAvatar()
+    public function deleteProfileAvatar(): void
     {
-        if (is_null($this->avatar)) {
+        if (! is_string($this->avatar) || $this->avatar === '') {
             return;
         }
 
@@ -55,9 +53,9 @@ trait HasProfileAvatar
      *
      * @return string
      */
-    public function getAvatarUrlAttribute()
+    public function getAvatarUrlAttribute(): string
     {
-        return $this->avatar
+        return is_string($this->avatar) && $this->avatar !== ''
             ? Storage::url($this->avatar)
             : '';
     }

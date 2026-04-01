@@ -13,7 +13,7 @@ class ChangePasswordRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,9 +21,9 @@ class ChangePasswordRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'oldPassword' => 'required|string',
@@ -31,7 +31,7 @@ class ChangePasswordRequest extends FormRequest
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): never
     {
         throw new HttpResponseException(response()->json($validator->errors(), 422));
     }

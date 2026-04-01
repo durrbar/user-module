@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\User\Models;
 
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,9 +37,23 @@ use Spatie\Permission\Traits\HasRoles;
 
 // use Modules\User\Database\Factories\UserFactory;
 
-final class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
+/**
+ * @property string $id
+ * @property string $email
+ * @property string|null $password
+ * @property string|null $avatar
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $phone
+ * @property string|null $birthday
+ * @property string|null $gender
+ * @property string|null $locale
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ */
+class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     use HasApiTokens;
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
     use HasNotification;
     use HasProfileAvatar;
@@ -46,7 +61,6 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
     use HasUuids;
     use Notifiable;
     use TwoFactorAuthenticatable;
-
     /**
      * The table associated with the model.
      */
@@ -95,72 +109,110 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
      *
      * @return string
      */
-    public function getNameAttribute()
+    public function getNameAttribute(): string
     {
+        $fullName = preg_replace(
+            '/\s+/',
+            ' ',
+            "{$this->first_name} {$this->last_name}"
+        ) ?? '';
+
         return mb_trim(
-            preg_replace(
-                '/\s+/',
-                ' ',
-                "{$this->first_name} {$this->last_name}"
-            )
+            $fullName
         );
     }
 
+    /**
+     * @return HasMany<Address, $this>
+     */
     public function address(): HasMany
     {
         return $this->hasMany(Address::class, 'customer_id');
     }
 
+    /**
+     * @return HasMany<Conversation, $this>
+     */
     public function conversations(): HasMany
     {
         return $this->hasMany(Conversation::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<Order, $this>
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'customer_id')->with(['products.variation_options', 'reviews']);
     }
 
+    /**
+     * @return HasOne<Profile, $this>
+     */
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class, 'customer_id');
     }
 
+    /**
+     * @return HasOne<Wallet, $this>
+     */
     public function wallet(): HasOne
     {
         return $this->hasOne(Wallet::class, 'customer_id');
     }
 
+    /**
+     * @return HasMany<Shop, $this>
+     */
     public function shops(): HasMany
     {
         return $this->hasMany(Shop::class, 'owner_id');
     }
 
+    /**
+     * @return HasMany<Shop, $this>
+     */
     public function refunds(): HasMany
     {
         return $this->hasMany(Shop::class, 'customer_id');
     }
 
+    /**
+     * @return BelongsTo<Shop, $this>
+     */
     public function managed_shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class, 'shop_id');
     }
 
+    /**
+     * @return HasMany<Provider, $this>
+     */
     public function providers(): HasMany
     {
         return $this->hasMany(Provider::class, 'user_id', 'id');
     }
 
+    /**
+     * @return HasMany<Review, $this>
+     */
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<Question, $this>
+     */
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<OrderedFile, $this>
+     */
     public function ordered_files(): HasMany
     {
         return $this->hasMany(OrderedFile::class, 'customer_id');
@@ -168,6 +220,8 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
 
     /**
      * Follow shop
+     *
+     * @return BelongsToMany<Shop, $this, \Illuminate\Database\Eloquent\Relations\Pivot, 'pivot'>
      */
     public function follow_shops(): BelongsToMany
     {
@@ -176,6 +230,8 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
 
     /**
      * Follow shop
+     *
+     * @return HasMany<PaymentGateway, $this>
      */
     public function payment_gateways(): HasMany
     {
@@ -184,6 +240,8 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
 
     /**
      * faqs
+     *
+     * @return HasMany<Faqs, $this>
      */
     public function faqs(): HasMany
     {
@@ -192,6 +250,8 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
 
     /**
      * terms and conditions
+     *
+     * @return HasMany<TermsAndConditions, $this>
      */
     public function terms_and_conditions(): HasMany
     {
@@ -200,13 +260,15 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
 
     /**
      * coupons
+     *
+     * @return HasMany<Coupon, $this>
      */
     public function coupon(): HasMany
     {
         return $this->HasMany(Coupon::class);
     }
 
-    public function loadLastOrder()
+    public function loadLastOrder(): self
     {
         $data = $this->orders()->whereNull('parent_id')
             ->where('order_status', OrderStatus::COMPLETED)
@@ -224,11 +286,17 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
         return $this->locale ?? app()->getLocale();
     }
 
+    /**
+     * @return HasMany<SocialAccount, $this>
+     */
     public function socialAccounts(): HasMany
     {
         return $this->hasMany(SocialAccount::class);
     }
 
+    /**
+     * @return HasMany<SocialAccount, $this>
+     */
     public function socialLinks(): HasMany
     {
         return $this->socialAccounts()->whereNotNull('profile_url');
@@ -236,18 +304,20 @@ final class User extends Authenticatable implements HasLocalePreference, MustVer
 
     /**
      * Get all addresses created by the user.
+     *
+     * @return HasMany<Address, $this>
      */
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'created_by');
     }
 
-    // protected static function newFactory(): UserFactory
-    // {
-    //     // return UserFactory::new();
-    // }
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         // Order by updated_at desc

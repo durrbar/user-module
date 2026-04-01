@@ -19,29 +19,22 @@ class InstallCommand extends Command
     protected $description = 'Install the necessary configurations, migrations, and resources for the user module';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('Starting the installation of the Durrbar User Module...');
 
         $this->publishFortifyConfig();
 
         // You can add other installation tasks here (migrations, seeding, etc.)
+        return self::SUCCESS;
     }
 
     /**
      * Publish Fortify config file.
      */
-    private function publishFortifyConfig()
+    private function publishFortifyConfig(): void
     {
         $this->call('vendor:publish', [
             '--tag' => ['durrbar-fortify-config', 'durrbar-sanctum-config', 'durrbar-permission-config'],

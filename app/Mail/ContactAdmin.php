@@ -11,14 +11,20 @@ class ContactAdmin extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $details;
+    /**
+     * @var array<string, string>
+     */
+    public array $details;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    /**
+     * @param  array<string, string>  $details
+     */
+    public function __construct(array $details)
     {
         $this->details = $details;
     }
@@ -28,8 +34,15 @@ class ContactAdmin extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
-        return $this->from($this->details['email'])->markdown('notification::emails.contact-admin');
+        $fromEmail = $this->details['email'] ?? null;
+
+        if (! is_string($fromEmail) || $fromEmail === '') {
+            $configuredFrom = config('mail.from.address');
+            $fromEmail = is_string($configuredFrom) && $configuredFrom !== '' ? $configuredFrom : 'noreply@example.com';
+        }
+
+        return $this->from($fromEmail)->markdown('notification::emails.contact-admin');
     }
 }
