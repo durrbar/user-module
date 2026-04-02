@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Modules\Role\Enums\Permission;
 use Modules\User\Models\User;
@@ -9,9 +12,9 @@ use Modules\User\Models\User;
 trait UsersTrait
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, User>
+     * @return Collection<int, User>
      */
-    public function getAdminUsers(): \Illuminate\Database\Eloquent\Collection
+    public function getAdminUsers(): Collection
     {
         return Cache::remember(
             'cached_admin',

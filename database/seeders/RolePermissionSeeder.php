@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\User\Models\Permission;
 use Modules\Role\Models\Role;
+use Modules\User\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {

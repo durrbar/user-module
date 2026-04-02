@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Responses;
 
+use Illuminate\Http\Request;
 use Laravel\Fortify\Fortify;
 use Modules\User\Contracts\BaseResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class HasEmailResponse implements BaseResponse
 {
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  Request  $request
+     * @return Response
      */
     public function toResponse($request)
     {

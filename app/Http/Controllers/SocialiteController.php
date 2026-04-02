@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\AbstractProvider;
@@ -114,7 +117,7 @@ class SocialiteController extends Controller
         $socialiteProvider = Socialite::driver($provider);
 
         if (! $socialiteProvider instanceof AbstractProvider) {
-            throw new \InvalidArgumentException("Unsupported provider [$provider].");
+            throw new InvalidArgumentException("Unsupported provider [$provider].");
         }
 
         return $socialiteProvider;

@@ -1,13 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Address\Models\Address;
@@ -27,8 +34,28 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $birthday
  * @property string|null $gender
  * @property string|null $locale
- * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property Carbon|null $email_verified_at
  */
+#[Table('users')]
+#[Appends([
+    'avatar_url',
+    'name',
+])]
+#[Fillable([
+    'email',
+    'avatar',
+    'first_name',
+    'last_name',
+    'password',
+    'phone',
+    'birthday',
+    'gender',
+    'email_verified_at',
+])]
+#[Hidden([
+    'password',
+    'remember_token',
+])]
 class UserOld extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     use HasApiTokens;
@@ -38,55 +65,6 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
     use HasUuids;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    /**
-     * The table associated with the model.
-     */
-    protected $table = 'users';
-
-    protected $appends = [
-        'avatar_url',
-        'name',
-    ];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'email',
-        'avatar',
-        'first_name',
-        'last_name',
-        'password',
-        'phone',
-        'birthday',
-        'gender',
-        'email_verified_at',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 
     // protected static function newFactory(): UserFactory
     // {
@@ -95,8 +73,6 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
 
     /**
      * Return the full name of the customer.
-     *
-     * @return string
      */
     public function getNameAttribute(): string
     {
@@ -106,7 +82,7 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
             "{$this->first_name} {$this->last_name}"
         ) ?? '';
 
-        return trim(
+        return mb_trim(
             $fullName
         );
     }
@@ -143,5 +119,18 @@ class UserOld extends Authenticatable implements HasLocalePreference, MustVerify
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'created_by');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }

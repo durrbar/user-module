@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\User\Http\Controllers\ProfileAvatarController;
 use Modules\User\Http\Controllers\SocialiteController;
 use Modules\User\Http\Controllers\UserController;
-use Modules\User\Resources\UserResource;
 
 /*
  *--------------------------------------------------------------------------

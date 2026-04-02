@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Responses;
 
 use Illuminate\Http\Request;
@@ -10,7 +12,6 @@ class UpdateAvatarResponse implements BaseResponse
 {
     /**
      * Create an HTTP response that represents the object.
-     *
      */
     public function toResponse($request): Response
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Actions\Profile;
 
 use Modules\User\Contracts\DeleteUserAvatar;

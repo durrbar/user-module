@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 test('new users can register', function (): void {
     $prefix = '/api/v1';
     $token = 'test-csrf-token';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Repositories;
 
 use Illuminate\Http\Request;
@@ -66,8 +68,8 @@ class UserRepository extends BaseRepository
     {
         $payload = $request instanceof Request ? $request->all() : $request;
         $fullName = $this->asString(Arr::get($payload, 'name', ''));
-        $firstName = $this->asString(Arr::get($payload, 'first_name', trim((string) str($fullName)->before(' '))));
-        $lastName = $this->asString(Arr::get($payload, 'last_name', trim((string) str($fullName)->after(' '))));
+        $firstName = $this->asString(Arr::get($payload, 'first_name', mb_trim((string) str($fullName)->before(' '))));
+        $lastName = $this->asString(Arr::get($payload, 'last_name', mb_trim((string) str($fullName)->after(' '))));
 
         try {
             $user = $this->create([
@@ -79,7 +81,7 @@ class UserRepository extends BaseRepository
             if (! $user instanceof User) {
                 throw new DurrbarException(SOMETHING_WENT_WRONG);
             }
-            $user->givePermissionTo(UserPermission::CUSTOMER);
+            $user->givePermissionTo(UserPermission::Customer->value);
             $addresses = Arr::get($payload, 'address', []);
             if (is_array($addresses) && $addresses !== []) {
                 /** @var list<array<string, mixed>> $addressPayload */
@@ -162,7 +164,7 @@ class UserRepository extends BaseRepository
             Mail::to($email)->send(new ForgetPassword($token));
 
             return true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }

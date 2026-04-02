@@ -2,22 +2,14 @@
 
 namespace Modules\User\Console;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Attribute\AsCommand;
 
-#[AsCommand(name: 'durrbar:user-install')]
+#[Signature('durrbar:user-install')]
+#[Description('Install the necessary configurations, migrations, and resources for the user module')]
 class InstallCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     */
-    protected $signature = 'durrbar:user-install';
-
-    /**
-     * The console command description.
-     */
-    protected $description = 'Install the necessary configurations, migrations, and resources for the user module';
-
     /**
      * Execute the console command.
      */

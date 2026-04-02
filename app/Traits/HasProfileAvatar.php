@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Traits;
 
 use Illuminate\Http\UploadedFile;
@@ -11,7 +13,6 @@ trait HasProfileAvatar
 {
     /**
      * Update the user's profile avatar.
-     *
      */
     public function updateProfileAvatar(UploadedFile $avatar, User $user): void
     {
@@ -34,7 +35,6 @@ trait HasProfileAvatar
 
     /**
      * Delete the user's profile avatar.
-     *
      */
     public function deleteProfileAvatar(): void
     {
@@ -50,8 +50,6 @@ trait HasProfileAvatar
 
     /**
      * Get the URL to the user's profile avatar.
-     *
-     * @return string
      */
     public function getAvatarUrlAttribute(): string
     {

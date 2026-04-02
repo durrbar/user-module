@@ -7,15 +7,21 @@ namespace Modules\User\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Address\Models\Address;
@@ -31,7 +37,6 @@ use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderedFile;
 use Modules\Payment\Models\PaymentGateway;
 use Modules\Review\Models\Review;
-use Modules\Core\Models\Scopes\OrderByUpdatedAtDescScope;
 use Modules\User\Traits\HasProfileAvatar;
 use Modules\Vendor\Models\Shop;
 use Spatie\Permission\Traits\HasRoles;
@@ -49,57 +54,43 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $birthday
  * @property string|null $gender
  * @property string|null $locale
- * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property Carbon|null $email_verified_at
  */
-#[ScopedBy([OrderByUpdatedAtDescScope::class])]
+#[UseFactory(UserFactory::class)]
+#[Table('users')]
+#[Appends([
+    'avatar_url',
+    'name',
+    'email_verified',
+])]
+#[Fillable([
+    'email',
+    'avatar',
+    'first_name',
+    'last_name',
+    'password',
+    'phone',
+    'birthday',
+    'gender',
+    'email_verified_at',
+])]
+#[Hidden([
+    'password',
+    'remember_token',
+])]
 class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     use HasApiTokens;
+
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+
     use HasNotification;
     use HasProfileAvatar;
     use HasRoles;
     use HasUuids;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    /**
-     * The table associated with the model.
-     */
-    protected $table = 'users';
-
-    protected $appends = [
-        'avatar_url',
-        'name',
-        'email_verified',
-    ];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'email',
-        'avatar',
-        'first_name',
-        'last_name',
-        'password',
-        'phone',
-        'birthday',
-        'gender',
-        'email_verified_at',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
 
     public function getEmailVerifiedAttribute(): bool
     {
@@ -108,8 +99,6 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
 
     /**
      * Return the full name of the customer.
-     *
-     * @return string
      */
     public function getNameAttribute(): string
     {
@@ -223,7 +212,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     /**
      * Follow shop
      *
-     * @return BelongsToMany<Shop, $this, \Illuminate\Database\Eloquent\Relations\Pivot, 'pivot'>
+     * @return BelongsToMany<Shop, $this, Pivot, 'pivot'>
      */
     public function follow_shops(): BelongsToMany
     {
@@ -312,11 +301,6 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'created_by');
-    }
-
-    protected static function newFactory(): UserFactory
-    {
-        return UserFactory::new();
     }
 
     /**

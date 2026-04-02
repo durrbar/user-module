@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Providers;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -61,46 +63,6 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register commands in the format of Command::class
-     */
-    protected function registerCommands(): void
-    {
-        // $this->commands();
-    }
-
-    /**
-     * Register command Schedules.
-     */
-    protected function registerCommandSchedules(): void
-    {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
-    }
-
-    /**
-     * Configure the publishable resources offered by the package.
-     *
-     */
-    protected function configurePublishing(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../../stubs/fortify.php' => config_path('fortify.php'),
-            ], 'durrbar-fortify-config');
-
-            $this->publishes([
-                __DIR__.'/../../stubs/sanctum.php' => config_path('sanctum.php'),
-            ], 'durrbar-sanctum-config');
-
-            $this->publishes([
-                __DIR__.'/../../stubs/permission.php' => config_path('permission.php'),
-            ], 'durrbar-permission-config');
-        }
-    }
-
-    /**
      * Register translations.
      */
     public function registerTranslations(): void
@@ -117,41 +79,6 @@ class UserServiceProvider extends ServiceProvider
         } else {
             $this->loadTranslationsFrom($moduleLangPath, $this->nameLower);
             $this->loadJsonTranslationsFrom($moduleLangPath);
-        }
-    }
-
-    /**
-     * Register config.
-     */
-    protected function registerConfig(): void
-    {
-        $relativeConfigPath = config('modules.paths.generator.config.path');
-        if (! is_string($relativeConfigPath) || $relativeConfigPath === '') {
-            return;
-        }
-
-        $configPath = module_path($this->name, $relativeConfigPath);
-        if (! is_string($configPath) || $configPath === '') {
-            return;
-        }
-
-        if (is_dir($configPath)) {
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
-
-            foreach ($iterator as $file) {
-                if (! $file instanceof SplFileInfo) {
-                    continue;
-                }
-
-                if ($file->isFile() && $file->getExtension() === 'php') {
-                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
-                    $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
-
-                    $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
-                    $this->mergeConfigFrom($file->getPathname(), $key);
-                }
-            }
         }
     }
 
@@ -188,6 +115,80 @@ class UserServiceProvider extends ServiceProvider
     public function provides(): array
     {
         return [];
+    }
+
+    /**
+     * Register commands in the format of Command::class
+     */
+    protected function registerCommands(): void
+    {
+        // $this->commands();
+    }
+
+    /**
+     * Register command Schedules.
+     */
+    protected function registerCommandSchedules(): void
+    {
+        // $this->app->booted(function () {
+        //     $schedule = $this->app->make(Schedule::class);
+        //     $schedule->command('inspire')->hourly();
+        // });
+    }
+
+    /**
+     * Configure the publishable resources offered by the package.
+     */
+    protected function configurePublishing(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../../stubs/fortify.php' => config_path('fortify.php'),
+            ], 'durrbar-fortify-config');
+
+            $this->publishes([
+                __DIR__.'/../../stubs/sanctum.php' => config_path('sanctum.php'),
+            ], 'durrbar-sanctum-config');
+
+            $this->publishes([
+                __DIR__.'/../../stubs/permission.php' => config_path('permission.php'),
+            ], 'durrbar-permission-config');
+        }
+    }
+
+    /**
+     * Register config.
+     */
+    protected function registerConfig(): void
+    {
+        $relativeConfigPath = config('modules.paths.generator.config.path');
+        if (! is_string($relativeConfigPath) || $relativeConfigPath === '') {
+            return;
+        }
+
+        $configPath = module_path($this->name, $relativeConfigPath);
+        if (! is_string($configPath) || $configPath === '') {
+            return;
+        }
+
+        if (is_dir($configPath)) {
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
+
+            foreach ($iterator as $file) {
+                if (! $file instanceof SplFileInfo) {
+                    continue;
+                }
+
+                if ($file->isFile() && $file->getExtension() === 'php') {
+                    $relativePath = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $configKey = $this->nameLower.'.'.str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
+
+                    $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
+                    $this->mergeConfigFrom($file->getPathname(), $key);
+                }
+            }
+        }
     }
 
     /**
