@@ -7,7 +7,7 @@ namespace Modules\User\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +31,7 @@ use Modules\Order\Models\Order;
 use Modules\Order\Models\OrderedFile;
 use Modules\Payment\Models\PaymentGateway;
 use Modules\Review\Models\Review;
+use Modules\Core\Models\Scopes\OrderByUpdatedAtDescScope;
 use Modules\User\Traits\HasProfileAvatar;
 use Modules\Vendor\Models\Shop;
 use Spatie\Permission\Traits\HasRoles;
@@ -50,6 +51,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $locale
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  */
+#[ScopedBy([OrderByUpdatedAtDescScope::class])]
 class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     use HasApiTokens;
@@ -315,15 +317,6 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
-    }
-
-    protected static function boot(): void
-    {
-        parent::boot();
-        // Order by updated_at desc
-        self::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('updated_at', 'desc');
-        });
     }
 
     /**
