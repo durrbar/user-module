@@ -271,7 +271,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function loadLastOrder(): self
     {
         $data = $this->orders()->whereNull('parent_id')
-            ->where('order_status', OrderStatus::COMPLETED)
+            ->where('order_status', OrderStatus::Completed->value)
             ->latest()->first();
         $this->setRelation('last_order', $data);
 
