@@ -12,12 +12,7 @@ use Modules\User\Repositories\ProfileRepository;
 
 class ProfileController extends CoreController
 {
-    protected ProfileRepository $repository;
-
-    public function __construct(ProfileRepository $repository)
-    {
-        $this->repository = $repository;
-    }
+    public function __construct(protected ProfileRepository $repository) {}
 
     public function index(Request $request): mixed
     {
