@@ -12,12 +12,7 @@ use Modules\User\Resources\UserResource;
 
 class UserController extends Controller
 {
-    /**
-     * Get authenticated user data
-     *
-     * @return JsonResponse
-     */
-    public function me(Request $request)
+    public function me(Request $request): JsonResponse
     {
         return response()->json([
             'user' => new UserResource($request->user()),

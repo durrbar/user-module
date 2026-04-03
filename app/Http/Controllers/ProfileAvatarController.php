@@ -16,9 +16,6 @@ use Modules\User\Models\User;
 
 class ProfileAvatarController extends Controller
 {
-    /**
-     * Update the user's profile avatar.
-     */
     public function update(ProfileAvatarRequest $request, UpdateProfileAvatar $updater): UpdateAvatarResponse
     {
         $updater->update($this->resolveUser($request), $request->validated());
@@ -26,9 +23,6 @@ class ProfileAvatarController extends Controller
         return new UpdateAvatarResponse();
     }
 
-    /**
-     * Delete the user's profile avatar.
-     */
     public function delete(Request $request, DeleteProfileAvatar $deleter): DeleteAvatarResponse
     {
         $deleter->delete($this->resolveUser($request));

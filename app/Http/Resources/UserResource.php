@@ -9,12 +9,6 @@ use Modules\Core\Http\Resources\Resource;
 
 class UserResource extends Resource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
