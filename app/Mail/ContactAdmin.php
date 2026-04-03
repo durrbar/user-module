@@ -13,28 +13,8 @@ class ContactAdmin extends Mailable
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var array<string, string>
-     */
-    public array $details;
+    public function __construct(public array $details) {}
 
-    /**
-     * Create a new message instance.
-     *
-     */
-    /**
-     * @param  array<string, string>  $details
-     */
-    public function __construct(array $details)
-    {
-        $this->details = $details;
-    }
-
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build(): self
     {
         $fromEmail = $this->details['email'] ?? null;

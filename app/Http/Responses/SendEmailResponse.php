@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\User\Http\Responses;
 
-use Illuminate\Http\Request;
 use Laravel\Fortify\Fortify;
 use Modules\User\Contracts\BaseResponse;
 use Symfony\Component\HttpFoundation\Response;

@@ -13,22 +13,8 @@ class ForgetPassword extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public string $token;
+    public function __construct(public string $token) {}
 
-    /**
-     * Create a new message instance.
-     *
-     */
-    public function __construct(string $token)
-    {
-        $this->token = $token;
-    }
-
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build(): self
     {
         return $this->markdown('notification::emails.forget-password');
