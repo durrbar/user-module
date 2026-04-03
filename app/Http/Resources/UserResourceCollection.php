@@ -15,7 +15,7 @@ class UserResourceCollection extends Resource
      * @param  Request  $request
      * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
 
