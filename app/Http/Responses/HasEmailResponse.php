@@ -11,13 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HasEmailResponse implements BaseResponse
 {
-    /**
-     * Create an HTTP response that represents the object.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function toResponse($request)
+    public function toResponse($request): Response
     {
         return $request->wantsJson()
             ? response()->json([

@@ -10,9 +10,6 @@ use Modules\User\Contracts\BaseResponse;
 
 class DeleteAvatarResponse implements BaseResponse
 {
-    /**
-     * Create an HTTP response that represents the object.
-     */
     public function toResponse($request): \Symfony\Component\HttpFoundation\Response
     {
         /** @var Request $request */

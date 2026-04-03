@@ -10,9 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateAvatarResponse implements BaseResponse
 {
-    /**
-     * Create an HTTP response that represents the object.
-     */
     public function toResponse($request): Response
     {
         /** @var Request $request */

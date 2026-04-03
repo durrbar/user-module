@@ -8,31 +8,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProfileAvatarRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules(): array
     {
         return [
-            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:1024'], // Ensure file type and size constraints
+            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return true; // Authorization logic can be expanded here if needed
+        return true;
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
