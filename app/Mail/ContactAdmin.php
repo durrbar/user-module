@@ -21,7 +21,6 @@ class ContactAdmin extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
      */
     /**
      * @param  array<string, string>  $details
