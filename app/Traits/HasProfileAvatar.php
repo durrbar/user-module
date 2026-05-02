@@ -6,7 +6,7 @@ namespace Modules\User\Traits;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Modules\Common\Facades\FileHelper;
+use Modules\Core\Facades\FileHelper;
 use Modules\User\Models\User;
 
 trait HasProfileAvatar
