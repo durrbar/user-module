@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Modules\User\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\JsonApi\JsonApiResource;
 
-class SocialAccountResource extends JsonApiResource
+class SocialAccountJsonApiResource extends JsonApiResource
 {
     public function toArray(Request $request): array
     {
