@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Fortify\Contracts\PasskeyUser;
+use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Address\Models\Address;
@@ -78,7 +80,7 @@ use Spatie\Permission\Traits\HasRoles;
     'password',
     'remember_token',
 ])]
-class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
+class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail, PasskeyUser
 {
     use HasApiTokens;
 
@@ -90,6 +92,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     use HasRoles;
     use HasUuids;
     use Notifiable;
+    use PasskeyAuthenticatable;
     use TwoFactorAuthenticatable;
 
     public function getEmailVerifiedAttribute(): bool
