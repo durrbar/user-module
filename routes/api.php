@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\PasskeyController;
 use Modules\User\Http\Controllers\ProfileAvatarController;
 use Modules\User\Http\Controllers\SocialiteController;
 use Modules\User\Http\Controllers\UserController;
@@ -28,6 +29,9 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function (): void {
     // Authenticated user routes
     Route::prefix('user')->name('user.')->middleware('verified')->group(function (): void {
         Route::get('me', [UserController::class, 'me'])->withoutMiddleware('verified')->name('me');
+
+        // Passkeys
+        Route::get('passkeys', [PasskeyController::class, 'passkeys']);
 
         // Profile management
         Route::post('profile-photo', [ProfileAvatarController::class, 'update'])->name('photo.update');
