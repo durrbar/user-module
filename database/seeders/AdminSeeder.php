@@ -19,7 +19,13 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::first();
+        $admin = User::firstOrCreate(
+            ['email' => 'kidmax285@gmail.com'],
+            [
+                'name' => 'Kid Max',
+                'password' => bcrypt('demo1234'),
+            ]
+        );
 
         if ($admin instanceof User) {
             $admin->assignRole('Super Admin');
