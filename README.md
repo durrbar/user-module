@@ -1,8 +1,9 @@
 # User Module for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/durrbar/user-module.svg?style=flat-square)](https://packagist.org/packages/durrbar/user-module)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/durrbar/user-module/run-tests-L8.yml?branch=main&label=Tests)](https://github.com/durrbar/user-module/actions?query=workflow%3ATests+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/durrbar/user-module/run-tests.yml?branch=main&label=tests)](https://github.com/durrbar/user-module/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/durrbar/user-module.svg?style=flat-square)](https://packagist.org/packages/durrbar/user-module)
+[![License](https://img.shields.io/packagist/dt/durrbar/user-module.svg?style=flat-square)](LICENSE.md)
 
 The **User Module** is a powerful and flexible Laravel package designed to streamline user management. It provides essential functionality for managing users, roles, and permissions in Laravel applications.
 
@@ -69,13 +70,13 @@ The package includes ready-to-use authentication routes for login, registration,
 
 The package includes the following API endpoints:
 
-| Endpoint                   | Method | Description                  |
-|----------------------------|--------|------------------------------|
-| `/api/users`               | GET    | List all users               |
-| `/api/users/{id}`          | GET    | Retrieve a specific user     |
-| `/api/users`               | POST   | Create a new user            |
-| `/api/users/{id}`          | PUT    | Update a user's information  |
-| `/api/users/{id}`          | DELETE | Delete a user                |
+| Endpoint             | Method | Description                 |
+| -------------------- | ------ | --------------------------- |
+| `/api/v1/users`      | GET    | List all users              |
+| `/api/v1/users/{id}` | GET    | Retrieve a specific user    |
+| `/api/v1/users`      | POST   | Create a new user           |
+| `/api/v1/users/{id}` | PUT    | Update a user's information |
+| `/api/v1/users/{id}` | DELETE | Delete a user               |
 
 ---
 
@@ -124,4 +125,3 @@ For issues or feature requests, please open an issue on the [GitHub repository](
 
 - Author: [Durrbar](https://github.com/durrbar)
 - Packagist: [durrbar/user-module](https://packagist.org/packages/durrbar/user-module)
-
